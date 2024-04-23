@@ -48,6 +48,13 @@
                                             <p class='text-danger inputerror'>{{ $message }} </p>
                                             @enderror
                                             <div class="input-group input-group-outline mt-3">
+                                                <label class="form-label">Phone</label>
+                                                <input type="text" class="form-control" name="phone" value="{{ old('phone') }}">
+                                            </div>
+                                            @error('phone')
+                                                <p class='text-danger inputerror'>{{ $message }} </p>
+                                            @enderror
+                                            <div class="input-group input-group-outline mt-3">
                                                 <label class="form-label">Password</label>
                                                 <input type="password" class="form-control" name="password">
                                             </div>

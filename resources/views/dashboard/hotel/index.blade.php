@@ -40,7 +40,7 @@
                                                 <td>{{ $hotel->nama }}</td>
                                                 <td>{{ $hotel->KategoriHotel->name }}</td>
                                                 <td><img src="{{ asset('images/hotels/' . $hotel->gambar) }}" alt="Hotel Image" style="max-width: 100px;"></td>
-                                                <td>{{ $hotel->harga }}</td>
+                                                <td>Rp. {{ number_format($hotel->harga, 0, ',', '.') }}</td>
                                                 <td>{{ $hotel->fasilitas }}</td>
                                                 <td>{{ $hotel->deskripsi }}</td>
                                                 <td>{{ $hotel->totalKamar }}</td>
@@ -48,10 +48,10 @@
                                                     <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#editHotelModal{{ $hotel->id }}">
                                                         <i class="fas fa-edit"></i> Edit
                                                     </button>
-                                                    <a href="{{ route('hotels.destroy', $hotel->id) }}" class="btn btn-sm btn-danger" onclick="event.preventDefault(); document.getElementById('delete-hotel-form-{{ $hotel->id }}').submit();">
+                                                    <button type="button" class="btn btn-sm btn-danger" onclick="confirmDelete({{ $hotel->id }})">
                                                         <i class="fas fa-trash"></i> Delete
-                                                    </a>
-                                                    <form id="delete-hotel-form-{{ $hotel->id }}" action="{{ route('hotels.destroy', $hotel->id) }}" method="POST" style="display: none;">
+                                                    </button>
+                                                    <form id="deleteForm{{ $hotel->id }}" action="{{ route('hotels.destroy', $hotel->id) }}" method="POST" style="display: none;">
                                                         @csrf
                                                         @method('DELETE')
                                                     </form>
@@ -174,3 +174,24 @@
     </main>
     <x-footers.auth></x-footers.auth>
 </x-layout>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+<!-- Add JavaScript function for SweetAlert confirmation -->
+<script>
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You will not be able to recover this hotel!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // If confirmed, submit the form
+                document.getElementById('deleteForm' + id).submit();
+            }
+        });
+    }
+</script>

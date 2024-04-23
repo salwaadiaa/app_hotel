@@ -14,6 +14,10 @@ return new class extends Migration
         Schema::create('kategori_hotels', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('gambar')->nullable();
+            $table->string('size')->nullable();
+            $table->integer('kapasitas')->nullable();
+            $table->string('bed')->nullable();
             $table->timestamps();
         });
     }

@@ -10,5 +10,9 @@ class KategoriHotel extends Model
     use HasFactory;
     protected $fillable = [
         'name',
+        'gambar',
+        'size',
+        'kapasitas',
+        'bed',
     ];
 }

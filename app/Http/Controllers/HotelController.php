@@ -135,49 +135,6 @@ class HotelController extends Controller
         return redirect()->route('hotel.index')->with('success', 'Hotel berhasil dihapus.');
     }
 
-    public function showBookingForm(Request $request)
-    {
-        $hotel_id = $request->input('hotel_id');
-        return view('pages.booking.index', compact('hotel_id'));
-    }
-    
-
-    // Method untuk menyimpan pemesanan
-    public function storeBooking(Request $request)
-    {
-        // Validasi data yang diterima dari form
-        $request->validate([
-            'full_name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'phone' => 'required|string|max:20',
-            'check_in_date' => 'required|date',
-            'check_out_date' => 'required|date|after:check_in_date',
-            'payment_method' => 'required|string|max:255',
-            // Jika ada validasi tambahan, tambahkan di sini
-        ]);
-
-        // Simpan data pemesanan ke dalam database
-        Booking::create([
-            'full_name' => $request->input('full_name'),
-            'email' => $request->input('email'),
-            'phone' => $request->input('phone'),
-            'check_in_date' => $request->input('check_in_date'),
-            'check_out_date' => $request->input('check_out_date'),
-            'payment_method' => $request->input('payment_method'),
-            'hotel_id' => $request->input('hotel_id'),
-        ]);
-
-        // Redirect kembali ke halaman form dengan pesan sukses atau lakukan tindakan lain yang sesuai
-        return redirect()->route('landing')->with('success', 'Booking successful! Thank you for choosing our hotel.');
-
-    }
-
-    public function indexBook()
-    {
-        $hotels = Hotel::all();
-        $bookings = Booking::all();
-        return view('pages.booking.index-admin', compact('hotels', 'bookings'));
-    }
 
     
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BookingController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,11 +26,12 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SessionsController;
 use App\Models\KategoriHotel;
 
-Route::get('/', function () {return redirect('sign-in');})->middleware('guest');
+Route::get('/', function () {return redirect('landing');})->middleware('guest');
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('auth')->name('dashboard');
 Route::get('sign-up', [RegisterController::class, 'create'])->middleware('guest')->name('register');
 Route::post('sign-up', [RegisterController::class, 'store'])->middleware('guest');
 Route::get('sign-in', [SessionsController::class, 'create'])->middleware('guest')->name('login');
+Route::get('landing', [SessionsController::class, 'landing'])->middleware('guest')->name('landing');
 Route::post('sign-in', [SessionsController::class, 'store'])->middleware('guest');
 Route::post('verify', [SessionsController::class, 'show'])->middleware('guest');
 Route::post('reset-password', [SessionsController::class, 'update'])->middleware('guest')->name('password.update');
@@ -43,6 +45,19 @@ Route::get('/hotels', [HotelController::class, 'index'])->name('hotel.index');
 Route::post('/hotels', [HotelController::class, 'store'])->name('hotels.store');
 Route::put('/hotels/{hotel}', [HotelController::class, 'update'])->name('hotels.update');
 Route::delete('/hotels/{hotel}', [HotelController::class, 'destroy'])->name('hotels.destroy');
+
+Route::get('/booking', [BookingController::class, 'index'])->name('booking.index');
+Route::get('/booking/selesai', [BookingController::class, 'indexSelesai'])->name('booking.indexselesai');
+Route::get('/user/booking', [BookingController::class, 'indexuser'])->name('transaksi.user');
+Route::delete('/booking/{booking}', [BookingController::class, 'destroy'])->name('bookings.destroy');
+Route::put('/booking/{booking}', [BookingController::class, 'update'])->name('bookings.update');
+Route::post('/booking', [BookingController::class, 'store'])->name('booking.store');
+Route::get('/booking/create/{hotel_id}', [BookingController::class, 'create'])->name('booking.create');
+Route::post('bookings/{booking}/finish', [BookingController::class, 'finish'])->name('booking.finish');
+Route::get('booking/export-pdf', [BookingController::class, 'exportPDF'])->name('booking.exportPdf');
+Route::post('booking/{booking}/reschedule', [BookingController::class, 'reschedule'])->name('booking.reschedule');
+
+Route::get('/rooms', [DashboardController::class, 'landingHotel'])->name('rooms');
 
 Route::get('verify', function () {
 	return view('sessions.password.verify');

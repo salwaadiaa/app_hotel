@@ -9,6 +9,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Password;
+use App\Models\Hotel;
+use App\Models\KategoriHotel;
 
 class SessionsController extends Controller
 {
@@ -82,6 +84,12 @@ class SessionsController extends Controller
         auth()->logout();
 
         return redirect('/sign-in');
+    }
+
+    public function landing()
+    {
+        $categories = KategoriHotel::take(4)->get();
+        return view('components.landing', compact('categories'));
     }
 
 }

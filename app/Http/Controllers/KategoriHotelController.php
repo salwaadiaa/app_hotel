@@ -22,39 +22,61 @@ class KategoriHotelController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|unique:kategori_hotels',
+        $request->validate([
+            'name' => 'required',
+            'gambar' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'size' => 'required',
+            'kapasitas' => 'required',
+            'bed' => 'required',
         ]);
-    
-        // Buat kategori baru dan simpan ke database
+
+        $imageName = time().'.'.$request->gambar->extension();  
+        $request->gambar->move(public_path('images/kategori'), $imageName);
+
         KategoriHotel::create([
-            'name' => $validatedData['name'],
-        ]);
-    
-        return redirect()->route('kategori-hotel.index')->with('success', 'Kategori Hotel berhasil ditambahkan');
-    }
-
-    /**
-     * Memperbarui kategori yang ada di penyimpanan.
-     */
-    public function update(Request $request, KategoriHotel $kategoriHotel)
-    {
-        $validatedData = $request->validate([
-            'editCategoryName' => 'required|unique:kategori_hotels,name,'.$kategoriHotel->id,
+            'name' => $request->name,
+            'gambar' => $imageName,
+            'size' => $request->size,
+            'kapasitas' => $request->kapasitas,
+            'bed' => $request->bed,
         ]);
 
-        $kategoriHotel->update(['name' => $validatedData['editCategoryName']]);
-
-        return redirect()->route('kategori-hotel.index')->with('success', 'Kategori Hotel berhasil diperbarui');
+        return redirect()->route('kategori-hotel.index')
+                         ->with('success','Category added successfully');
     }
 
-    /**
-     * Menghapus kategori dari penyimpanan.
-     */
-    public function destroy(KategoriHotel $kategoriHotel)
+    // Mengupdate kategori yang ada
+    public function update(Request $request, $id)
     {
-        $kategoriHotel->delete();
+        $request->validate([
+            'editCategoryName' => 'required',
+            'editCategoryImage' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'editCategorySize' => 'required',
+            'editCategoryCapacity' => 'required',
+            'editCategoryBed' => 'required',
+        ]);
 
-        return redirect()->route('kategori-hotel.index')->with('success', 'Kategori Hotel berhasil dihapus');
+        $category = KategoriHotel::find($id);
+
+        $imageName = time().'.'.$request->editCategoryImage->extension();  
+        $request->editCategoryImage->move(public_path('images/kategori'), $imageName);
+
+        $category->name = $request->editCategoryName;
+        $category->gambar = $imageName;
+        $category->size = $request->editCategorySize;
+        $category->kapasitas = $request->editCategoryCapacity;
+        $category->bed = $request->editCategoryBed;
+        $category->save();
+
+        return redirect()->route('kategori-hotel.index')
+                         ->with('success','Category updated successfully');
+    }
+
+    // Menghapus kategori
+    public function destroy($id)
+    {
+        KategoriHotel::destroy($id);
+        return redirect()->route('kategori-hotel.index')
+                         ->with('success','Category deleted successfully');
     }
 }

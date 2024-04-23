@@ -15955,7 +15955,7 @@ hr.horizontal {
 
 .table td,
 .table th {
-  white-space: nowrap; }
+  white-space: wrap; }
 
 .table.align-items-center td,
 .table.align-items-center th {

@@ -36,22 +36,11 @@ class BookingController extends Controller
     {
         $bookingsSelesai = Booking::where('status', 'Check-out')->get();
 
-        // Render view dengan data yang difilter
         $view = view('dashboard.booking.pdf', compact('bookingsSelesai'))->render();
-
-        // Buat objek Dompdf
         $dompdf = new Dompdf();
-
-        // Muat HTML ke Dompdf
         $dompdf->loadHtml($view);
-
-        // Set ukuran dan orientasi kertas
         $dompdf->setPaper('A4', 'landscape');
-
-        // Render PDF (Output)
         $dompdf->render();
-
-        // Unduh file PDF
         return $dompdf->stream('booking_report.pdf');
     }
 
@@ -99,8 +88,14 @@ class BookingController extends Controller
         if (auth()->user()->role !== 'admin') {
             return redirect()->back()->with('error', 'You are not authorized to finish bookings.');
         }
+
+        $hotel = $booking->hotel;
+
         $booking->status = 'Check-out';
         $booking->save();
+
+        $hotel->totalKamar += 1;
+        $hotel->save();
 
         return redirect()->route('booking.index')->with('success', 'Booking has been marked as finished.');
     }

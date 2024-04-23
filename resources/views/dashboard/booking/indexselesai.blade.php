@@ -55,7 +55,7 @@
                                         @endforeach
                                         <!-- Total Harga -->
                                         <tr>
-                                            <td colspan="4" class="text-end font-weight-bold">Total Harga:</td>
+                                            <td colspan="4" class="text-end font-weight-bold">Total :</td>
                                             <td colspan="4" class="text-start font-weight-bold">Rp. {{ number_format($totalHarga, 0, ',', '.') }}</td>
                                         </tr>
                                     </tbody>
